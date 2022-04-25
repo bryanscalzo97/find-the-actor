@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "find-the-actor",
+    "slug": "find-the-actor",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
