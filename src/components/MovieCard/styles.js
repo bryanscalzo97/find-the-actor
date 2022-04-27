@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#F1F5F9",
     borderRadius: 16,
-    marginTop: 16,
+    marginBottom: 16,
     padding: 10,
     flex: 3,
   },
@@ -20,9 +20,7 @@ const styles = StyleSheet.create({
     height: 129,
     borderRadius: 16,
   },
-  starsMovie: {
-    marginTop: 10,
-  },
+
   title: {
     fontSize: 24,
     fontWeight: "bold",
@@ -30,6 +28,12 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     fontWeight: "bold",
+  },
+  starsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 10,
   },
 });
 

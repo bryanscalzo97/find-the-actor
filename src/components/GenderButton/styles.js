@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   genderBtn: {
     backgroundColor: "#FACC15",
-    width: 100,
+    width: 80,
     alignItems: "center",
     marginRight: 60,
     borderRadius: 100,

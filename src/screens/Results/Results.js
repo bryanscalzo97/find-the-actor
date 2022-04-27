@@ -12,6 +12,7 @@ import BackButton from "../../components/BackButton/BackButton";
 import axios from "axios";
 import MovieCard from "../../components/MovieCard/MovieCard";
 import GenderButton from "../../components/GenderButton/GenderButton";
+import { FontAwesome } from "@expo/vector-icons";
 
 const Results = () => {
   const [movies, setMovies] = useState([]);
@@ -59,13 +60,17 @@ const Results = () => {
           </View>
           <View style={styles.popularContainer}>
             <Text style={styles.popular}>Popularidad</Text>
-            <Text style={styles.stars}>27.22</Text>
+            <View style={styles.starsContainer}>
+              <Text style={styles.starsNumber}>27.22</Text>
+              <FontAwesome name={"star"} size={16} color="#FACC15" />
+            </View>
           </View>
         </View>
       </ImageBackground>
 
       <View style={styles.movies}>
         <Text style={styles.moviesTitle}>Peliculas:</Text>
+
         <FlatList
           data={movies}
           renderItem={({ item }) => <MovieCard item={item} />}

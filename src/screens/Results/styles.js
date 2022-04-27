@@ -35,10 +35,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-  stars: {
+  starsNumber: {
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  starsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
   },
   popularContainer: {
     paddingTop: 14,
@@ -46,6 +51,8 @@ const styles = StyleSheet.create({
   moviesTitle: {
     fontSize: 32,
     fontWeight: "bold",
+    paddingTop: 16,
+    paddingBottom: 16,
   },
 });
 
