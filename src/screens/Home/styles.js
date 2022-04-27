@@ -16,8 +16,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-  famousContainer: {
-    marginTop: 32,
+  selectImage: {
+    fontSize: 16,
+    fontWeight: "bold",
+    justifyContent: "center",
+    padding: 20,
+  },
+  bottomSheetContainer: {
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
