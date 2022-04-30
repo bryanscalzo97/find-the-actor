@@ -9,7 +9,9 @@ const MovieCard = ({ item }) => {
     <View style={styles.cardContainer}>
       <View style={styles.card}>
         <Text style={styles.title}>{item.original_title}</Text>
-        <Text style={styles.text}>{item.overview}</Text>
+        <Text numberOfLines={5} style={styles.text}>
+          {item.overview}
+        </Text>
       </View>
       <View style={styles.image}>
         <Image style={styles.imageMovie} source={{ uri: imageUrl }} />

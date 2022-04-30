@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  FlatList,
-  ImageBackground,
-  ScrollView,
-  Button,
-} from "react-native";
+import { View, Text, FlatList, ImageBackground } from "react-native";
 import React, { useEffect, useState } from "react";
 import styles from "./styles";
 import BackButton from "../../components/BackButton/BackButton";
@@ -14,14 +7,15 @@ import MovieCard from "../../components/MovieCard/MovieCard";
 import GenderButton from "../../components/GenderButton/GenderButton";
 import { FontAwesome } from "@expo/vector-icons";
 
-const Results = () => {
+const Results = ({ route }) => {
   const [movies, setMovies] = useState([]);
   const [actor, setActor] = useState("");
   const [gender, setGender] = useState();
   const [image, setImage] = useState("");
+  const { theActor } = route.params;
 
   const imageUrl = "https://image.tmdb.org/t/p/w500/" + image;
-  const myActor = "Will Smith";
+  const myActor = theActor;
 
   async function loadData() {
     try {

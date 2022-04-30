@@ -5,9 +5,15 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { FontAwesome } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
+import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
 
 const Home = ({ navigation }) => {
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState("");
+  const [isImageSet, setIsImageSet] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [actor, setActor] = useState("");
+  const [errorActor, setErrorActor] = useState("");
+  const [errorServer, setErrorServer] = useState(false);
 
   const refRBSheet = useRef();
 
@@ -22,7 +28,8 @@ const Home = ({ navigation }) => {
     console.log(result);
 
     if (!result.cancelled) {
-      setImage(result.uri);
+      let url = result.uri;
+      uploadImage(url);
     }
   };
 
@@ -37,61 +44,77 @@ const Home = ({ navigation }) => {
     console.log(result);
 
     if (!result.cancelled) {
-      setImage(result.uri);
+      let url = result.uri;
+      uploadImage(url);
     }
   };
 
-  const uploadImage = async () => {
-    // Check if any file is selected or not
-    if (image != null) {
-      const formdata = new FormData();
-      formdata.append("file", {
-        uri: image,
-        type: "image/jpg",
-        name: "name",
-      });
-      axios
-        .post(
-          "https://whois.nomada.cloud/upload",
-          formdata,
+  const uploadImage = async (url) => {
+    setImage(url);
+    setIsImageSet(true);
+    setIsLoading(true);
+    const formdata = new FormData();
+    formdata.append("file", {
+      uri: url,
+      type: "image/jpg",
+      name: "name",
+    });
+    axios
+      .post(
+        "https://whois.nomada.cloud/upload",
+        formdata,
 
-          {
-            headers: {
-              Nomada: "NzFlZTQ5NmItOWZiYy00MDMwLWJiOTgtN2FlZjM0NDVkYTc4",
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        )
-        .then(function (response) {
-          console.log(response.data);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    }
+        {
+          headers: {
+            Nomada: "NzFlZTQ5NmItOWZiYy00MDMwLWJiOTgtN2FlZjM0NDVkYTc4",
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
+      .then(function (response) {
+        console.log(response.data);
+        if (response.data.error === "") {
+          setActor(response.data.actorName);
+          setIsLoading(false);
+        } else {
+          setErrorActor(response.data.error);
+          setIsLoading(false);
+        }
+
+        console.log(actor);
+      })
+      .catch(function (error) {
+        console.log(error);
+        setErrorServer(true);
+        setIsLoading(false);
+      });
   };
 
   return (
     <View style={styles.homeContainer}>
       <View>
-        <Text style={styles.heyDev}>Hey, Dev</Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.heyDev}>Hey, Dev</Text>
+          <Image
+            style={styles.emoji}
+            source={require("../../../assets/emoji.png")}
+          />
+        </View>
+
         <Text style={styles.text}>Keep up the good work!</Text>
       </View>
       <View style={styles.famousContainer}>
         <Text style={styles.famousText}>¿Quién es el famoso?</Text>
 
-        {/* <Button
-          title="subir imagen"
-          onPress={() => refRBSheet.current.open()}
-        /> */}
         <TouchableOpacity
           style={styles.uploadButton}
           onPress={() => refRBSheet.current.open()}
         >
+          <Image
+            style={styles.selectImageIcon}
+            source={require("../../../assets/selectImageIcon.png")}
+          />
           <Text style={styles.selectText}>Presiona para elegir una foto</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Results")}>
-          <Text>Ver actor</Text>
         </TouchableOpacity>
 
         <RBSheet
@@ -113,7 +136,7 @@ const Home = ({ navigation }) => {
           }}
         >
           <View style={styles.bottomSheetContainer}>
-            {image === null ? (
+            {isImageSet === false ? (
               <View>
                 <View style={styles.selectImageContainer}>
                   <Text style={styles.selectImage}>Selecciona una foto</Text>
@@ -136,18 +159,63 @@ const Home = ({ navigation }) => {
                 </View>
               </View>
             ) : (
-              image && (
-                <View style={styles.containerImage}>
-                  <Text style={styles.uploadingText}>Subiendo...</Text>
-                  <Image
-                    source={{ uri: image }}
-                    style={{ width: 175, height: 211, borderRadius: 36 }}
-                  />
-                  <Button title="Enviar imagen" onPress={uploadImage}>
-                    Enviar imagen
-                  </Button>
+              <View style={styles.containerImage}>
+                <Text style={styles.uploadingText}>
+                  {isLoading
+                    ? "Subiendo"
+                    : errorActor != ""
+                    ? "¿Es un famoso?"
+                    : errorServer === false
+                    ? "Listo"
+                    : "Hubo un error"}
+                </Text>
+
+                <Image
+                  source={{ uri: image != "" ? image : undefined }}
+                  style={{ width: 175, height: 211, borderRadius: 36 }}
+                />
+
+                <TouchableOpacity
+                  style={
+                    isLoading
+                      ? styles.btnSearching
+                      : errorActor != ""
+                      ? styles.btnNotFound
+                      : errorServer === false
+                      ? styles.btnActor
+                      : styles.btnError
+                  }
+                  onPress={() => {
+                    if (actor != "")
+                      navigation.navigate("Results", { theActor: actor });
+                  }}
+                >
+                  <Text
+                    style={
+                      errorActor != ""
+                        ? styles.btnIconTextBlack
+                        : styles.btnIconText
+                    }
+                  >
+                    {isLoading
+                      ? "Buscando..."
+                      : errorActor != ""
+                      ? "No se encontró"
+                      : errorServer === false
+                      ? actor
+                      : "Error de red o de servidor"}
+                  </Text>
+                </TouchableOpacity>
+                <View style={styles.ButtonContainer}>
+                  {(errorServer === true || errorActor != "") && (
+                    <Button
+                      title="Cerrar"
+                      color="#3843D0"
+                      accessibilityLabel="Cerrar"
+                    />
+                  )}
                 </View>
-              )
+              </View>
             )}
           </View>
         </RBSheet>
