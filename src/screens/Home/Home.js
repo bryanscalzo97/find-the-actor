@@ -162,7 +162,7 @@ const Home = ({ navigation }) => {
               <View style={styles.containerImage}>
                 <Text style={styles.uploadingText}>
                   {isLoading
-                    ? "Subiendo"
+                    ? "Subiendo..."
                     : errorActor != ""
                     ? "¿Es un famoso?"
                     : errorServer === false

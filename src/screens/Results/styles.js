@@ -6,7 +6,10 @@ const styles = StyleSheet.create({
   },
   infoActor: {
     flex: 1,
+  },
+  gradient: {
     padding: 16,
+    height: "100%",
     justifyContent: "flex-end",
   },
   movies: {

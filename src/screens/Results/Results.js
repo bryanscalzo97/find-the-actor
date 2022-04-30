@@ -6,6 +6,7 @@ import axios from "axios";
 import MovieCard from "../../components/MovieCard/MovieCard";
 import GenderButton from "../../components/GenderButton/GenderButton";
 import { FontAwesome } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 
 const Results = ({ route }) => {
   const [movies, setMovies] = useState([]);
@@ -43,23 +44,29 @@ const Results = ({ route }) => {
         source={{ uri: imageUrl }}
         resizeMode="cover"
       >
-        <View style={styles.dataActor}>
-          <View>
+        <LinearGradient
+          // Button Linear Gradient
+          colors={["transparent", "rgba(0,0,0,0.8)"]}
+          style={styles.gradient}
+        >
+          <View style={styles.dataActor}>
             <View>
-              <Text style={styles.actor}>{actor}</Text>
+              <View>
+                <Text style={styles.actor}>{actor}</Text>
+              </View>
+              <View>
+                <GenderButton gender={gender} />
+              </View>
             </View>
-            <View>
-              <GenderButton gender={gender} />
+            <View style={styles.popularContainer}>
+              <Text style={styles.popular}>Popularidad</Text>
+              <View style={styles.starsContainer}>
+                <Text style={styles.starsNumber}>27.22</Text>
+                <FontAwesome name={"star"} size={16} color="#FACC15" />
+              </View>
             </View>
           </View>
-          <View style={styles.popularContainer}>
-            <Text style={styles.popular}>Popularidad</Text>
-            <View style={styles.starsContainer}>
-              <Text style={styles.starsNumber}>27.22</Text>
-              <FontAwesome name={"star"} size={16} color="#FACC15" />
-            </View>
-          </View>
-        </View>
+        </LinearGradient>
       </ImageBackground>
 
       <View style={styles.movies}>
