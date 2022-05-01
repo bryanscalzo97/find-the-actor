@@ -2,9 +2,13 @@ import { TouchableHighlight, Image } from "react-native";
 import React from "react";
 import styles from "./styles";
 
-const BackButton = () => {
+const BackButton = ({ navigation }) => {
   return (
-    <TouchableHighlight style={styles.btnContainer}>
+    <TouchableHighlight
+      underlayColor="none"
+      style={styles.btnContainer}
+      onPress={() => navigation.goBack()}
+    >
       <Image
         source={require("../../../assets/arrow-left.png")}
         style={styles.btnIcon}

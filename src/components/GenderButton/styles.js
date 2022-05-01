@@ -12,6 +12,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
   },
+  genderText: {
+    fontWeight: "bold",
+    fontSize: 14,
+  },
 });
 
 export default styles;

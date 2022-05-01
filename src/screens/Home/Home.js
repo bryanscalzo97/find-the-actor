@@ -213,7 +213,9 @@ const Home = ({ navigation }) => {
                   }
                   onPress={() => {
                     if (actor != "")
-                      navigation.navigate("Results", { theActor: actor });
+                      navigation.navigate("Results", {
+                        nameActorRequest: actor,
+                      });
 
                     refRBSheet.current.close();
                   }}

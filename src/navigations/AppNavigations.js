@@ -1,4 +1,4 @@
-import { View, Text, Alert } from "react-native";
+import { View, Text, Alert, Button } from "react-native";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -18,7 +18,11 @@ const AppNavigations = () => {
             headerShown: false,
           }}
         />
-        <Stack.Screen name="Results" component={Results} />
+        <Stack.Screen
+          name="Results"
+          component={Results}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

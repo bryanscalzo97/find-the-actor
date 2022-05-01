@@ -5,7 +5,7 @@ import styles from "./styles";
 const GenderButton = ({ gender }) => {
   return (
     <View style={styles.genderBtn}>
-      <Text>{gender === 1 ? "Mujer" : "Hombre"}</Text>
+      <Text style={styles.genderText}>{gender === 1 ? "Mujer" : "Hombre"}</Text>
     </View>
   );
 };
