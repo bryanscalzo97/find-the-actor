@@ -14,21 +14,22 @@ const Results = ({ route }) => {
   const [gender, setGender] = useState();
   const [image, setImage] = useState("");
   const { theActor } = route.params;
+  const [dataActor, setDataActor] = useState([]);
 
   const imageUrl = "https://image.tmdb.org/t/p/w500/" + image;
-  const myActor = theActor;
 
   async function loadData() {
     try {
       const response = await axios.get(
         "https://api.themoviedb.org/3/search/person?api_key=30db1237b9167f8afaf9e065b90d16b8&language=en-US&query=" +
-          myActor +
+          theActor +
           "&page=1&include_adult=false"
       );
       setMovies(response.data.results[0].known_for);
       setActor(response.data.results[0].name);
       setGender(response.data.results[0].gender);
       setImage(response.data.results[0].profile_path);
+      setDataActor(response.data.results[0]);
     } catch (error) {
       console.error(error);
     }
@@ -45,7 +46,6 @@ const Results = ({ route }) => {
         resizeMode="cover"
       >
         <LinearGradient
-          // Button Linear Gradient
           colors={["transparent", "rgba(0,0,0,0.8)"]}
           style={styles.gradient}
         >

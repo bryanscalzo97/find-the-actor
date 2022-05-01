@@ -7,16 +7,7 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#FFF",
   },
-  heyDev: {
-    color: "#0F172A",
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-  text: {
-    color: "#475569",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
+
   selectImage: {
     fontSize: 16,
     fontWeight: "bold",
@@ -150,15 +141,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderRadius: 12,
   },
-  emoji: {
-    width: 16,
-    height: 16,
-    margin: 5,
+
+  sheetIcons: {
+    width: 24,
+    height: 24,
   },
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
+
   selectImageIcon: {
     width: 49,
     height: 48,

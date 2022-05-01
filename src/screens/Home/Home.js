@@ -1,11 +1,10 @@
 import { View, Text, TouchableOpacity, Button, Image } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styles from "./styles";
 import RBSheet from "react-native-raw-bottom-sheet";
-import { FontAwesome } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
-import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
+import HomeHeader from "../../components/HomeHeader/HomeHeader";
 
 const Home = ({ navigation }) => {
   const [image, setImage] = useState("");
@@ -14,6 +13,17 @@ const Home = ({ navigation }) => {
   const [actor, setActor] = useState("");
   const [errorActor, setErrorActor] = useState("");
   const [errorServer, setErrorServer] = useState(false);
+
+  useEffect(() => {
+    navigation.addListener("focus", async () => {
+      setImage("");
+      setIsImageSet(false);
+      setIsLoading(false);
+      setActor("");
+      setErrorActor("");
+      setErrorServer(false);
+    });
+  }, []);
 
   const refRBSheet = useRef();
 
@@ -29,9 +39,29 @@ const Home = ({ navigation }) => {
 
     if (!result.cancelled) {
       let url = result.uri;
-      uploadImage(url);
+      sentImage(url);
     }
   };
+
+  function sentImage(url) {
+    const allowedExtension = ["png", "PNG", "jpg", "JPG"];
+    const fileExtension = url.split(".").pop().toLowerCase();
+    let isValidFile = false;
+
+    for (let index in allowedExtension) {
+      if (fileExtension === allowedExtension[index]) {
+        isValidFile = true;
+        uploadImage(url);
+        break;
+      }
+    }
+
+    if (!isValidFile) {
+      alert(
+        "Solo puedes cargar imagenes png y jpg, por favor vuelve a intentar"
+      );
+    }
+  }
 
   const pickImageCamera = async () => {
     let result = await ImagePicker.launchCameraAsync({
@@ -92,17 +122,7 @@ const Home = ({ navigation }) => {
 
   return (
     <View style={styles.homeContainer}>
-      <View>
-        <View style={styles.titleContainer}>
-          <Text style={styles.heyDev}>Hey, Dev</Text>
-          <Image
-            style={styles.emoji}
-            source={require("../../../assets/emoji.png")}
-          />
-        </View>
-
-        <Text style={styles.text}>Keep up the good work!</Text>
-      </View>
+      <HomeHeader />
       <View style={styles.famousContainer}>
         <Text style={styles.famousText}>¿Quién es el famoso?</Text>
 
@@ -146,14 +166,20 @@ const Home = ({ navigation }) => {
                     style={styles.pickerGallery}
                     onPress={pickImage}
                   >
-                    <FontAwesome name={"image"} size={16} color="#000" />
+                    <Image
+                      style={styles.sheetIcons}
+                      source={require("../../../assets/image-icon.png")}
+                    />
                     <Text style={styles.pickerText}>Galería de imágenes</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.pickerGallery}
                     onPress={pickImageCamera}
                   >
-                    <FontAwesome name={"camera"} size={16} color="#000" />
+                    <Image
+                      style={styles.sheetIcons}
+                      source={require("../../../assets/camera-icon.png")}
+                    />
                     <Text style={styles.pickerText}>Cámara</Text>
                   </TouchableOpacity>
                 </View>
@@ -188,6 +214,8 @@ const Home = ({ navigation }) => {
                   onPress={() => {
                     if (actor != "")
                       navigation.navigate("Results", { theActor: actor });
+
+                    refRBSheet.current.close();
                   }}
                 >
                   <Text
@@ -212,6 +240,7 @@ const Home = ({ navigation }) => {
                       title="Cerrar"
                       color="#3843D0"
                       accessibilityLabel="Cerrar"
+                      onPress={() => refRBSheet.current.close()}
                     />
                   )}
                 </View>
