@@ -13,15 +13,10 @@ const Home = ({ navigation }) => {
   const [actor, setActor] = useState("");
   const [errorActor, setErrorActor] = useState("");
   const [errorServer, setErrorServer] = useState(false);
-
+ 
   useEffect(() => {
     navigation.addListener("focus", async () => {
-      setImage("");
-      setIsImageSet(false);
-      setIsLoading(false);
-      setActor("");
-      setErrorActor("");
-      setErrorServer(false);
+      restartBottomSheet()
     });
   }, []);
 
@@ -35,7 +30,19 @@ const Home = ({ navigation }) => {
       quality: 1,
     });
 
-    console.log(result);
+    if (!result.cancelled) {
+      let url = result.uri;
+      sentImage(url);
+    }
+  };
+
+  const pickImageCamera = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
     if (!result.cancelled) {
       let url = result.uri;
@@ -63,22 +70,6 @@ const Home = ({ navigation }) => {
     }
   }
 
-  const pickImageCamera = async () => {
-    let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: false,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    console.log(result);
-
-    if (!result.cancelled) {
-      let url = result.uri;
-      uploadImage(url);
-    }
-  };
-
   const uploadImage = async (url) => {
     setImage(url);
     setIsImageSet(true);
@@ -102,7 +93,6 @@ const Home = ({ navigation }) => {
         }
       )
       .then(function (response) {
-        console.log(response.data);
         if (response.data.error === "") {
           setActor(response.data.actorName);
           setIsLoading(false);
@@ -110,8 +100,6 @@ const Home = ({ navigation }) => {
           setErrorActor(response.data.error);
           setIsLoading(false);
         }
-
-        console.log(actor);
       })
       .catch(function (error) {
         console.log(error);
@@ -119,6 +107,15 @@ const Home = ({ navigation }) => {
         setIsLoading(false);
       });
   };
+
+  function restartBottomSheet() {
+    setImage("");
+      setIsImageSet(false);
+      setIsLoading(false);
+      setActor("");
+      setErrorActor("");
+      setErrorServer(false);
+  } 
 
   return (
     <View style={styles.homeContainer}>
@@ -242,7 +239,10 @@ const Home = ({ navigation }) => {
                       title="Cerrar"
                       color="#3843D0"
                       accessibilityLabel="Cerrar"
-                      onPress={() => refRBSheet.current.close()}
+                      onPress={() => {
+                        restartBottomSheet(),
+                         refRBSheet.current.close()
+                        }}
                     />
                   )}
                 </View>

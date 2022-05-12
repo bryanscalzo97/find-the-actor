@@ -1,7 +1,6 @@
 import { View } from "react-native";
-import React, { useEffect, useState, useLayoutEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./styles";
-import BackButton from "../../components/BackButton/BackButton";
 import axios from "axios";
 import MoviesList from "../../components/MoviesList/MoviesList";
 import ActorInfo from "../../components/ActorInfo/ActorInfo";
